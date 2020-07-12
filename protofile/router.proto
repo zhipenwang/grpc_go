@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option go_package = "grpc_go/protofile";
+
+package rpc.proto;
+
+enum Type {
+    UNKNOWN_TYPE = 0;
+    AUTH         = 1;
+    SEND         = 2;
+}
+
+message Request {
+    int32 uid = 1;
+    string name = 2;
+    Type type = 3;
+}
+
+message Response {
+    int32 uid = 1;
+    string name = 2;
+    int32 code = 3;
+}
+
+service rpc_stream {
+    // 简单rpc
+    rpc RouterSimple (Request) returns (Response) {}
+
+    // 服务端流式rpc
+    rpc RouterServer (Request) returns (stream Response) {}
+
+    // 客户端流式rpc
+    rpc RouterClient (stream Request) returns (Response) {}
+
+    // 双向流式rpc
+    rpc RouterChat (stream Request) returns (stream Response) {}
+}
